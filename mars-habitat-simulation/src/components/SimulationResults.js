@@ -8,17 +8,16 @@ const SimulationResults = ({ data }) => {
   const [cumulativeCancerRisk, setCumulativeCancerRisk] = useState([]);
   const [radiationChartData, setRadiationChartData] = useState(null);
   const [cancerRiskChartData, setCancerRiskChartData] = useState(null);
-  const [radiationComparison, setRadiationComparison] = useState('');
+  const [radiationReceived, setRadiationReceived] = useState(0);
+  const [radiationComparisonNormal, setRadiationComparisonNormal] = useState('');
+  const [radiationComparisonWorker, setRadiationComparisonWorker] = useState('');
 
   useEffect(() => {
     if (data) {
-      const { thickness, material, days, radiationPerThickness } = data;
-      const dailyRadiation = radiationPerThickness[thickness];
-      const materialEffectiveness = getMaterialEffectiveness(material);
-      const levels = generateRadiationLevels(days, dailyRadiation * materialEffectiveness);
+      const { thickness, material, days, radiationLevels } = data;
+      const dailyRadiation = radiationLevels[material][thickness];
+      const levels = generateRadiationLevels(days, dailyRadiation);
       const cumulativeRisk = calculateCumulativeCancerRisk(levels);
-
-      console.log(cumulativeRisk)
 
       setRadiationLevels(levels);
       setCumulativeCancerRisk(cumulativeRisk);
@@ -50,12 +49,18 @@ const SimulationResults = ({ data }) => {
       setRadiationChartData(radiationChartData);
       setCancerRiskChartData(cancerRiskChartData);
 
-      // Calculate radiation comparison
-      const allowableLevels = 1; // Normal person: 1 mSv/year
-      const totalAllowableRadiation = allowableLevels * (days / 365);
-      const totalReceivedRadiation = levels.reduce((sum, level) => sum + level, 0); // Convert to Sv
-      const comparison = totalReceivedRadiation / totalAllowableRadiation;
-      setRadiationComparison(comparison.toFixed(5));
+      // Calculate total radiation received and comparisons
+      const totalReceivedRadiation = levels.reduce((sum, level) => sum + level, 0); // Total in mSv
+      setRadiationReceived(totalReceivedRadiation.toFixed(2));
+
+      const allowableRadiationNormal = 1; // Annual allowable for normal person in mSv
+      const allowableRadiationWorker = 50; // Annual allowable for radiation worker in mSv
+
+      const comparisonNormal = totalReceivedRadiation / allowableRadiationNormal;
+      setRadiationComparisonNormal(comparisonNormal.toFixed(2));
+
+      const comparisonWorker = totalReceivedRadiation / allowableRadiationWorker;
+      setRadiationComparisonWorker(comparisonWorker.toFixed(2));
     }
   }, [data]);
 
@@ -74,24 +79,13 @@ const SimulationResults = ({ data }) => {
         <h3>Cumulative Cancer Risk Over Time</h3>
         <Line data={cancerRiskChartData} />
       </div>
-      <p>Final Cumulative Cancer Risk: {cumulativeCancerRisk[cumulativeCancerRisk.length - 1].toFixed(5)}%</p>
-      <p>Radiation received is {radiationComparison} times more than normal person's limit</p>
+      <p>Total Radiation Received: {radiationReceived} mSv</p>
+      <p>Final Cumulative Cancer Risk: {cumulativeCancerRisk[cumulativeCancerRisk.length - 1].toFixed(2)}%</p>
+      <p>Radiation received is {radiationComparisonNormal} times more than normal person's annual limit (1 mSv/year)</p>
+      <p>Radiation received is {radiationComparisonWorker} times more than radiation worker's annual limit (50 mSv/year)</p>
       <button onClick={() => window.location.reload()}>Restart Simulation</button>
     </div>
   );
-};
-
-// Function to get the effectiveness of the chosen material in shielding radiation
-const getMaterialEffectiveness = (material) => {
-  // Add effectiveness values for each material
-  const materialEffectivenessMap = {
-    Kevlar: 0.8,
-    LiH: 0.6,
-    Polypropylene: 0.5,
-    Mylar: 0.7,
-    Carbon: 0.9,
-  };
-  return materialEffectivenessMap[material];
 };
 
 export default SimulationResults;

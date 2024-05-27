@@ -14,7 +14,7 @@ export const generateRadiationLevels = (days, dailyRadiation) => {
 export const calculateCumulativeCancerRisk = (levels) => {
   let cumulativeRisk = 0;
   return levels.map(level => {
-    cumulativeRisk += (level / 1000) * 0.97;
+    cumulativeRisk += (level / 1000) * 0.97; // level is in mSv, so level/1000 gives Sv
     return cumulativeRisk;
   });
 };
