@@ -11,6 +11,7 @@ const SimulationResults = ({ data }) => {
   const [radiationReceived, setRadiationReceived] = useState(0);
   const [radiationComparisonNormal, setRadiationComparisonNormal] = useState('');
   const [radiationComparisonWorker, setRadiationComparisonWorker] = useState('');
+  const [radiationComparisonAstronaut, setRadiationComparisonAstronaut] = useState('');
 
   useEffect(() => {
     if (data) {
@@ -55,12 +56,16 @@ const SimulationResults = ({ data }) => {
 
       const allowableRadiationNormal = 1; // Annual allowable for normal person in mSv
       const allowableRadiationWorker = 50; // Annual allowable for radiation worker in mSv
+      const allowableRadiationAstronaut = 600; // Maximum radiation for an astronaut in mSv
 
       const comparisonNormal = totalReceivedRadiation / allowableRadiationNormal;
       setRadiationComparisonNormal(comparisonNormal.toFixed(2));
 
       const comparisonWorker = totalReceivedRadiation / allowableRadiationWorker;
       setRadiationComparisonWorker(comparisonWorker.toFixed(2));
+
+      const comparisonAstronaut = totalReceivedRadiation / allowableRadiationAstronaut;
+      setRadiationComparisonAstronaut(comparisonAstronaut.toFixed(2));
     }
   }, [data]);
 
@@ -81,8 +86,9 @@ const SimulationResults = ({ data }) => {
       </div>
       <p>Total Radiation Received: {radiationReceived} mSv</p>
       <p>Final Cumulative Cancer Risk: {cumulativeCancerRisk[cumulativeCancerRisk.length - 1].toFixed(2)}%</p>
-      <p>Radiation received is {radiationComparisonNormal} times more than normal person's annual limit (1 mSv/year)</p>
-      <p>Radiation received is {radiationComparisonWorker} times more than radiation worker's annual limit (50 mSv/year)</p>
+      <p>Radiation received is {radiationComparisonNormal} times than normal person's annual limit (1 mSv/year)</p>
+      <p>Radiation received is {radiationComparisonWorker} times than radiation worker's annual limit (50 mSv/year)</p>
+      <p>Radiation received is {radiationComparisonAstronaut} times than the limit for an astronaut (NASA-STD-3001) (600 mSv/mission)</p>
       <button onClick={() => window.location.reload()}>Restart Simulation</button>
     </div>
   );

@@ -10,12 +10,12 @@ function App() {
   const [simulationData, setSimulationData] = useState(null);
 
   const radiationLevels = {
-    'Kevlar': { 1: 0.8, 5: 0.5, 10: 0.3 },
-    'LiH': { 1: 0.7, 5: 0.4, 10: 0.2 },
-    'Polypropylene': { 1: 0.9, 5: 0.6, 10: 0.4 },
-    'Mylar': { 1: 1.0, 5: 0.7, 10: 0.5 },
-    'Carbon': { 1: 0.85, 5: 0.55, 10: 0.35 },
-    'No Shield': { 1: 1.0, 5: 1.0, 10: 1.0 },
+    'Kevlar': { 1: 0.763, 3: 0.755, 5: 0.749 },
+    'LiH': { 1: 0.753, 3: 0.729, 5: 0.712 },
+    'Polyesterene': { 1: 0.763, 3: 0.748, 5: 0.739 },
+    'Mylar': { 1: 0.705, 3: 0.641, 5: 0.604 },
+    'Carbon': { 1: 0.769, 3: 0.771, 5: 0.773 },
+    'No Shield': { 1: 1.0, 3: 1.0, 5: 1.0 },
   };
 
   const handleSubmit = () => {
@@ -41,8 +41,8 @@ function App() {
             Thickness of Material:
             <select value={thickness} onChange={(e) => setThickness(Number(e.target.value))}>
               <option value={1}>1 cm</option>
+              <option value={3}>3 cm</option>
               <option value={5}>5 cm</option>
-              <option value={10}>10 cm</option>
             </select>
           </label>
           <label>
@@ -50,7 +50,7 @@ function App() {
             <select value={material} onChange={(e) => setMaterial(e.target.value)}>
               <option value="Kevlar">Kevlar</option>
               <option value="LiH">LiH</option>
-              <option value="Polypropylene">Polypropylene</option>
+              <option value="Polyesterene">Polyesterene</option>
               <option value="Mylar">Mylar</option>
               <option value="Carbon">Carbon</option>
               <option value="No Shield">No Shield</option>
@@ -60,6 +60,7 @@ function App() {
             Days in Simulation:
             <input type="number" value={days} onChange={(e) => setDays(Number(e.target.value))} />
           </label>
+          <p className="note">Note: The simulation also accounts for an additional 10 cm of Martian regolith on top of the chosen material and thickness.</p>
           <button onClick={handleSubmit}>Start Simulation</button>
         </motion.div>
       ) : (

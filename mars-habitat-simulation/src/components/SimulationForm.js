@@ -8,11 +8,11 @@ const SimulationForm = ({ setSimulationData }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     const radiationValues = {
-      'Kevlar': { 1: 0.50, 5: 0.30, 10: 0.15 },
-      'LiH': { 1: 0.40, 5: 0.25, 10: 0.10 },
-      'Polypropylene': { 1: 0.45, 5: 0.28, 10: 0.12 },
-      'Mylar': { 1: 0.55, 5: 0.32, 10: 0.18 },
-      'Carbon': { 1: 0.48, 5: 0.29, 10: 0.14 },
+      'Kevlar': { 1: 0.763, 3: 0.755, 5: 0.749 },
+      'LiH': { 1: 0.753, 3: 0.729, 5: 0.712 },
+      'Polyesterene': { 1: 0.763, 3: 0.748, 5: 0.739 },
+      'Mylar': { 1: 0.705, 3: 0.641, 5: 0.604 },
+      'Carbon': { 1: 0.769, 3: 0.771, 5: 0.773 },
     };
     setSimulationData({
       thickness,
@@ -28,8 +28,8 @@ const SimulationForm = ({ setSimulationData }) => {
         Thickness (cm):
         <select value={thickness} onChange={(e) => setThickness(Number(e.target.value))}>
           <option value={1}>1 cm</option>
+          <option value={3}>3 cm</option>
           <option value={5}>5 cm</option>
-          <option value={10}>10 cm</option>
         </select>
       </label>
       <label>
@@ -37,7 +37,7 @@ const SimulationForm = ({ setSimulationData }) => {
         <select value={material} onChange={(e) => setMaterial(e.target.value)}>
           <option value="Kevlar">Kevlar</option>
           <option value="LiH">LiH</option>
-          <option value="Polypropylene">Polypropylene</option>
+          <option value="Polyesterene">Polypropylene</option>
           <option value="Mylar">Mylar</option>
           <option value="Carbon">Carbon</option>
         </select>
